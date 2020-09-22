@@ -35,6 +35,10 @@ services:
     image: elgalu/selenium
     depends_on:
       - hub
+    ports:
+      # Note 24444 is the default SELENIUM_HUB_PORT inside the container
+      #  and  4444 will be mapped into your host for easy access.
+      - 24444-40700:24444-40700
     volumes:
       - /dev/shm:/dev/shm
     privileged: true
@@ -53,6 +57,7 @@ services:
       - GRID=false
       - CHROME=true
       - FIREFOX=false
+      - CHROME_DRIVER_URL=https://chromedriver.storage.googleapis.com/85.0.4183.83/chromedriver_mac64.zip
 
   firefox:
     image: elgalu/selenium
@@ -78,7 +83,8 @@ services:
       - FIREFOX=true
 
   tests:
-    image: kishore:v1
+    build:
+      context: .
     depends_on:
       - hub
       - chrome
